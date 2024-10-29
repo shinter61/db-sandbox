@@ -1,6 +1,7 @@
 services:
   mysql8:
     image: mysql:8.0.28
+    platform: linux/x86_64
     container_name: mysql8
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -10,8 +11,7 @@ services:
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     volumes:
-      - ./docker/mysql8/data:/var/lib/mysql
-      - ./docker/mysql8/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysql8-db-store:/var/lib/mysql
     ports:
       - 3306:3306
         
@@ -26,8 +26,7 @@ services:
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     volumes:
-      - ./docker/mysql9/data:/var/lib/mysql
-      - ./docker/mysql9/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysql9-db-store:/var/lib/mysql
     ports:
       - 23306:3306
   postgres16:
@@ -37,7 +36,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: docker
     volumes:
-      - ./docker/postgres16/data:/var/lib/postgresql/data
-      - ./docker/postgres16/init:/docker-entrypoint-initdb.d
+      - postgresql16-db-store:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+volumes:
+  mysql8-db-store:
+  mysql9-db-store:
+  postgresql16-db-store:
